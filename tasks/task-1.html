@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Задача 1</h1>
+
+    <p>
+        Створити клас TDate для роботи із датами у форматі “день.місяць.рік”. 
+        Дата представляється структурою із трьома полями. 
+        Реалізувати методи збільшення/зменшення дати на певну 
+        кількість днів, місяців чи років. 
+        Введення та виведення дати реалізувати за допомогою методу  toString.
+
+    </p>
+
+    <script>
+    if (confirm(`Почати тестування`)){
+        class TDate{
+            constructor(initDay=1,initMonth=1,initYear=1){
+                this.Day = initDay
+                this.Month = initMonth
+                this.Year = initYear
+            }
+            #day
+            #month
+            #year
+
+            get Day(){
+                return this.#day
+            }
+            get Month(){
+                return this.#month
+            }
+            get Year(){
+                return this.#year
+            }
+
+            set Day(dayNum){
+                if(dayNum < 1 || dayNum > this.getMaxDaysInMonth()){
+                    throw new Error("Введіть коректний номер дня.");
+                }
+                this.#day = dayNum
+            }
+            set Month(monthNum){
+                if(monthNum < 1 || monthNum > 12){
+                    throw new Error("Введіть коректний номер місяця.");
+                }
+                this.#month = monthNum
+            }
+            set Year(yearNum){
+                if(yearNum<1){
+                    throw new Error("Введіть коректний номер року");
+                    
+                }
+                this.#year = yearNum
+            }
+            toString(){
+                return `${this.Day}.${this.Month}.${this.Year}<br>`
+            }
+            getMaxDaysInMonth(){
+                const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+                if(this.#month === 2 && this.isLeapYear()){
+                    return 29
+                }
+                return monthDays[this.#month-1]
+                
+            }
+            isLeapYear(){
+                return (this.#year % 4 === 0 && this.#year % 100 !== 0) || (this.#year % 400 === 0);
+            }
+
+            addDays(dayNum){
+                if(dayNum<0){
+                    throw new Error("Введіть коректне значення");
+                    
+                }
+                this.Day+=dayNum
+            }
+            removeDays(dayNum){
+                if(dayNum<0){
+                    throw new Error("Введіть коректне значення");
+                    
+                }
+                this.Day-=dayNum
+            }
+            addMonths(monthNum){
+                if(monthNum<0){
+                    throw new Error("Введіть коректне значення");
+                    
+                }
+                this.Month+=monthNum
+            }
+            removeMonths(monthNum){
+                if(monthNum<0){
+                    throw new Error("Введіть коректне значення");
+                    
+                }
+                this.Month-=monthNum
+            }
+            addYears(yearNum){
+                if(yearNum<0){
+                    throw new Error("Введіть коректне значення");
+                    
+                }
+                this.Year+=yearNum
+            }
+            removeYears(yearNum){
+                if(yearNum<0){
+                    throw new Error("Введіть коректне значення");
+                    
+                }
+                this.Year-=yearNum
+            }
+        }
+        let newDate = new TDate(23,10,2025)
+        document.write(newDate)
+        newDate.addDays(2)
+        newDate.addMonths(2)
+        newDate.addYears(12)
+        document.write(newDate)
+        newDate.removeDays(2)
+        newDate.removeMonths(2)
+        newDate.removeYears(12)
+        document.write(newDate)
+    }
+    </script>
+</body>
+</html>

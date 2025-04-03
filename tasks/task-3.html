@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Задача 3</h1>
+
+    <p>
+        Задача 3. Об’єкт “Фірма” (використати члени-класи)
+            поля
+                назва фірми;
+                дата заснування (рік, місяць);
+                послуги (назва послуги, вартість, термін виконання);
+                адреси філіалів (країна, місто, вулиця, номер будинку);
+            методи
+                визначення кількості років існування фірми;
+                виведення всіх філіалів фірми у вказаному місті;
+                виведення на екран послуг, що можуть бути виконані за вказану суму грошей та вказаний термін часу;
+
+
+    </p>
+
+    <script>
+    //  if (confirm(`Почати тестування`)){
+        class FoundationDate {
+            constructor(initMonth,initYear){
+                if(initMonth < 1 || initMonth > 12 ){
+                    throw new Error("Введіть коректний номер місяця");
+                }
+                if(initYear < 1){
+                    throw new Error("Введіть коректне значення");
+                }
+                this.month = initMonth
+                this.year = initYear
+            }
+        }
+        let testData = new FoundationDate(12,2020)
+
+        class  ServicesList{
+            constructor(){
+                this.servicesList = []
+            }
+            addNewBranch(initServiceName,initServiceCost,initserviceDuration){
+                if(initServiceName.length < 1 || initServiceCost < 1 || initserviceDuration < 1){
+                    throw new Error("Введіть коректні значення");
+                }
+                const newBranch = {
+                    serviceName: initServiceName,
+                    serviceCost: initServiceCost,
+                    serviceDuration: initserviceDuration
+                }
+                this.servicesList.push(newBranch)
+            }
+        }
+        
+        let testServicesList = new ServicesList()
+        testServicesList.addNewBranch('Консультація',500,2)
+        testServicesList.addNewBranch('Аналіз',200,11)
+        testServicesList.addNewBranch('Модернізація',1500,22)
+
+        class BranchAddressesList {
+            constructor(){
+                this.branchAddressesList = []
+            }
+            addNewBranch(initCountry,initCity,initStreet,initBuildingNumber){
+                if (!initCountry || !initCity || !initStreet  || initBuildingNumber < 0 ) {
+                    throw new Error("Введіть коректні значення");
+                    
+                }
+                const newBranch = {
+                    country: initCountry,
+                    city: initCity,
+                    street: initStreet,
+                    buildingNumber: initBuildingNumber,
+                }
+                this.branchAddressesList.push(newBranch)
+            }
+        }
+
+        let testBranchAddressesList = new BranchAddressesList()
+        testBranchAddressesList.addNewBranch('Україна','Львів','Шевченка',123)
+        testBranchAddressesList.addNewBranch('Польша','Варшава','Нова',567)
+        testBranchAddressesList.addNewBranch('Німеччина','Берлін','Ганса',33)
+        testBranchAddressesList.addNewBranch('Німеччина','Берлін','Франса',12)
+        console.log(testBranchAddressesList.branchAddressesList);
+    
+        class Еnterprise {
+            constructor(initTitle,initFoundationDate,initServicesList,initBranchAddressesList){
+                this.Title = initTitle
+                this.Data = initFoundationDate
+                this.Services = initServicesList
+                this.Addresses = initBranchAddressesList
+
+            }
+            #title
+            #foundationDate
+            #servicesList
+            #branchAddressesList
+            get Title(){
+                return this.#title 
+            }
+            set Title (title){
+                if(title.length < 1){
+                    throw new Error("Вкажіть назву фірми.");
+                }
+                this.#title = title
+            }
+            get Data (){
+                return this.#foundationDate
+            }
+            set Data(data){
+                if(!(data instanceof FoundationDate)){
+                    throw new Error("Відсутні дані");
+                    
+                }
+                this.#foundationDate = data
+            }
+            get Services(){
+                return this.#servicesList
+            }
+            set Services(arrServicesList){
+                if(!Array.isArray(arrServicesList) || arrServicesList.length < 1){
+                    throw new Error("Відсутні дані");
+                }
+                this.#servicesList = arrServicesList
+            }
+            get Addresses(){
+                return this.#branchAddressesList
+            }
+            set Addresses(arrAddressesList){
+                if (!Array.isArray(arrAddressesList) || arrAddressesList.length === 0) {
+                    throw new Error("Відсутні дані");
+                }   
+                this.#branchAddressesList = arrAddressesList
+            }
+            toString(){
+                return `${this.Title} (${this.Data.year})`
+            }
+            getNumYears(nowYear=2025){
+                return nowYear - this.#foundationDate.year
+            }
+            
+            getBranchFromCity(initCity) {
+                if (initCity.length < 1) {
+                    throw new Error("Введіть місто");
+                }
+                let test = this.#branchAddressesList.filter((branch)=>branch.city === initCity).map((branch) => ({
+                
+                    street: branch.street,
+                    buildingNumber: branch.buildingNumber
+                }))
+                
+                return test
+            }
+        
+            showServices(){
+                for (let i = 0; i < this.#servicesList.length; i++) {
+                    let service = this.#servicesList[i]
+                    document.write(`
+                        Послуга: ${service.serviceName}<br>
+                        Вартість: ${service.serviceCost}$<br>
+                        Тривалість днів: ${service.serviceDuration}<br>
+                    `)
+                }
+            }
+        }
+
+        let testЕnterprise = new Еnterprise('Капучіно',testData,testServicesList.servicesList,testBranchAddressesList.branchAddressesList)
+        console.log(testBranchAddressesList.branchAddressesList);    
+        console.log( testЕnterprise.getBranchFromCity('Берлін'))
+        testЕnterprise.showServices()
+
+    // }
+    
+    </script>
+</body>
+</html>

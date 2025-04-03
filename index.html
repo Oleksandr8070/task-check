@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Виконані домашні завдання </h1>
+    
+    <script>
+        document.write(`<ol>`)
+        for (let index = 1; index <= 4; index++) {
+            document.write(`<li><a href="./tasks/task-${index}.html">Задача ${index}</a></li>`)
+        }
+        document.write(`</ol>`)
+    </script>
+</body>
+</html>
