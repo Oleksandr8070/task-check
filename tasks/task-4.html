@@ -28,6 +28,7 @@
             #grn50
             #grn100
             #grn200
+
             constructor(
             numGrn5,
             numGrn10,
@@ -148,38 +149,51 @@
             }
             
             getMoney(userRequest){
-                if(userRequest > this.getMaxSum() || userRequest < this.getMinSum()){
-                    throw new Error(`Мінімальна сума зняття готівки: ${this.getMinSum()}, максимальна: ${this.getMaxSum()}`);
-                    
-                }
                 let slotCheck = []
-                let checkSum = userRequest
-                let checkValueArr = this.sortValue
 
-                for (let i = 0; i < checkValueArr.length; i++) {
-                    if (checkSum <= 0) break;
-                    let slot = checkValueArr[i];
-                    let checkValideCount = Math.floor(checkSum / slot.value);
+                for (let i = 0; i < this.sortValue.length; i++) {
+                    if (userRequest <= 0) break;
+                    let slot = this.sortValue[i];
+                    let checkValideCount = Math.floor(userRequest / slot.value);
 
                     if (checkValideCount > 0 && slot.count > 0) {
                         if (slot.count >= checkValideCount) {
-                            checkSum -= slot.value * checkValideCount;
+                            userRequest -= slot.value * checkValideCount;
                             slot.count -= checkValideCount;
                             slotCheck.push({ value: slot.value, count: checkValideCount });
                         } else {
-                            checkSum -= slot.value * slot.count;
+                            userRequest -= slot.value * slot.count;
                             slotCheck.push({ value: slot.value, count: slot.count });
                             slot.count = 0; 
                         }
                     }
                 }
-                
-                if(checkSum === 0){
-                    this.sortValue = checkValueArr
-                    return `Отримайте кошти `
-                    
+                return slotCheck
+            }
+            checkUserRequest(userRequest){
+                if(userRequest > this.getMaxSum() || userRequest < this.getMinSum()){
+                    throw new Error(`Мінімальна сума зняття готівки: ${this.getMinSum()}, максимальна: ${this.getMaxSum()}`);
                 }
-                else{
+                let checkSum = userRequest
+                for (let i = 0; i < this.sortValue.length; i++) {
+                    if (checkSum <= 0) break;
+                    let slot = this.sortValue[i];
+                    let checkValideCount = Math.floor(checkSum / slot.value);
+
+                    if (checkValideCount > 0 && slot.count > 0) {
+                        if (slot.count >= checkValideCount) {
+                            checkSum -= slot.value * checkValideCount;
+                        } else {
+                            checkSum -= slot.value * slot.count;
+
+                        }
+                    }
+                }
+
+                if(checkSum === 0){
+                    return this.getMoney(userRequest)
+                    
+                } else{
                     return `Ця сума недоступна. Доступні купюри ${this.toString()}`
                 }
                 
@@ -188,12 +202,12 @@
         
     let testBankomat = new TBankomat(10,14,20,10,30,5)
     console.log(testBankomat);
-    console.log(testBankomat.getMaxSum())
-    document.write(testBankomat)
-    console.log(testBankomat.getMoney(10))
-    console.log(testBankomat.getMoney(10))
-    console.log(testBankomat);
+    console.log(testBankomat.checkUserRequest(10))
+    console.log(testBankomat.checkUserRequest(11))
+    
     // }
+
+    
     </script>
 </body>
 </html>
