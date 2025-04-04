@@ -24,24 +24,24 @@
     </p>
 
     <script>
-    //  if (confirm(`Почати тестування`)){
+    if (confirm(`Почати тестування`)){
         class FoundationDate {
             constructor(initMonth,initYear){
+                this.yearNow = new Date().getFullYear();
                 if(initMonth < 1 || initMonth > 12 ){
                     throw new Error("Введіть коректний номер місяця");
                 }
-                if(initYear < 1 || initYear>2025){
+                if(initYear < 1 || initYear > this.yearNow){
                     throw new Error("Введіть коректне значення");
                 }
                 this.month = initMonth
                 this.year = initYear
-                this.yearNow = new Date().getFullYear();
             }
             getNumYear(){
                 return this.yearNow - this.year
             }
         }
-        let testData = new FoundationDate(12,2020)
+        let testDate = new FoundationDate(12,2020)
 
         class  ServicesList{
             constructor(){
@@ -70,7 +70,7 @@
                 this.branchAddressesList = []
             }
             addNewBranch(initCountry,initCity,initStreet,initBuildingNumber){
-                if (!initCountry || !initCity || !initStreet  || initBuildingNumber < 0 ) {
+                if (!initCountry || !initCity || !initStreet  || initBuildingNumber <= 0 ) {
                     throw new Error("Введіть коректні значення");
                     
                 }
@@ -92,17 +92,18 @@
         console.log(testBranchAddressesList.branchAddressesList);
     
         class Еnterprise {
-            constructor(initTitle,initFoundationDate,initServicesList,initBranchAddressesList){
-                this.Title = initTitle
-                this.Data = initFoundationDate
-                this.Services = initServicesList
-                this.Addresses = initBranchAddressesList
-
-            }
             #title
             #foundationDate
             #servicesList
             #branchAddressesList
+            
+            constructor(initTitle,initFoundationDate,initServicesList,initBranchAddressesList){
+                this.Title = initTitle
+                this.Date = initFoundationDate
+                this.Services = initServicesList
+                this.Addresses = initBranchAddressesList
+
+            }
             get Title(){
                 return this.#title 
             }
@@ -112,15 +113,15 @@
                 }
                 this.#title = title
             }
-            get Data (){
+            get Date (){
                 return this.#foundationDate
             }
-            set Data(data){
-                if(!(data instanceof FoundationDate)){
+            set Date(Date){
+                if(!(Date instanceof FoundationDate)){
                     throw new Error("Відсутні дані");
                     
                 }
-                this.#foundationDate = data
+                this.#foundationDate = Date
             }
             get Services(){
                 return this.#servicesList
@@ -141,7 +142,7 @@
                 this.#branchAddressesList = arrAddressesList
             }
             toString(){
-                return `${this.Title} (${this.Data.year})`
+                return `${this.Title} (${this.Date.year})`
             }
             getNumYears(){
                 return this.#foundationDate.getNumYear()
@@ -175,12 +176,12 @@
             }
         }
 
-        let testЕnterprise = new Еnterprise('Капучіно',testData,testServicesList.servicesList,testBranchAddressesList.branchAddressesList)
+        let testЕnterprise = new Еnterprise('Капучіно',testDate,testServicesList.servicesList,testBranchAddressesList.branchAddressesList)
         console.log(testBranchAddressesList.branchAddressesList);    
         console.log( testЕnterprise.getBranchFromCity('Берлін'))
         testЕnterprise.showServices(500,2)
         console.log(testЕnterprise.getNumYears())
-    // }
+    }
     
     </script>
 </body>

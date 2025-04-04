@@ -9,11 +9,190 @@
     <h1>Задача 4</h1>
 
     <p>
-        
+        Створити клас TBankomat, який моделює роботу банкомата. Клас повинен 
+        містити поля для зберігання кількості купюр кожного із номіналів від 5 до 200 гривень. 
+        Реалізувати методи знаходження максимальної та мінімальної сум, які може видати банкомат, 
+        та метод зняття деякої суми.
     </p>
 
     <script>
-    //  if (confirm(`Почати тестування`)){
+    // if (confirm(`Почати тестування`)){
+
+        
+
+
+        class TBankomat{
+            #grn5
+            #grn10
+            #grn20
+            #grn50
+            #grn100
+            #grn200
+            constructor(
+            numGrn5,
+            numGrn10,
+            numGrn20,
+            numGrn50,
+            numGrn100,
+            numGrn200
+            ){
+                
+                this.Grn5 = {
+                    value: 5,
+                    count: numGrn5
+                }
+                this.Grn10 = {
+                    value: 10,
+                    count: numGrn10
+                }
+                this.Grn20 = {
+                    value: 20,
+                    count: numGrn20
+                }
+                this.Grn50 = {
+                    value: 50,
+                    count: numGrn50
+                }
+                this.Grn100 = {
+                    value: 100,
+                    count: numGrn100
+                }
+                this.Grn200 = {
+                    value: 200,
+                    count: numGrn200
+                }
+                this.sortValue = [
+                this.#grn5,
+                this.#grn10,
+                this.#grn20,
+                this.#grn50,
+                this.#grn100,
+                this.#grn200
+                ].sort((a,b) => b.value - a.value)
+            }
+
+            get Grn5(){
+                return this.#grn5
+            }
+            get Grn10(){
+                return this.#grn10
+            }
+            get Grn20(){
+                return this.#grn20
+            }
+            get Grn50(){
+                return this.#grn50
+            }
+            get Grn100(){
+                return this.#grn100
+            }
+            get Grn200(){
+                return this.#grn200
+            }
+            
+            set Grn5 (numGrn5){
+                if (numGrn5 > 2000 || numGrn5 < 0) {
+                    throw new Error("Некоректне значення.");
+                }
+                this.#grn5 = numGrn5
+            }
+            set Grn10 (numGrn10){
+                if (numGrn10 > 2000 || numGrn10 < 0) {
+                    throw new Error("Некоректне значення.");
+                }
+                this.#grn10 = numGrn10
+            }
+            set Grn20 (numGrn20){
+                if (numGrn20 > 2000 || numGrn20 < 0) {
+                    throw new Error("Некоректне значення.");
+                }
+                this.#grn20 = numGrn20
+            }
+            set Grn50 (numGrn50){
+                if (numGrn50 > 2000 || numGrn50 < 0) {
+                    throw new Error("Некоректне значення.");
+                }
+                this.#grn50 = numGrn50
+            }
+            set Grn100 (numGrn100){
+                if (numGrn100 > 2000 || numGrn100 < 0) {
+                    throw new Error("Некоректне значення.");
+                }
+                this.#grn100 = numGrn100
+            }
+            set Grn200 (numGrn200){
+                if (numGrn200 > 2000 || numGrn200 < 0) {
+                    throw new Error("Некоректне значення.");
+                }
+                this.#grn200 = numGrn200
+            }
+
+            toString(){
+                return `${this.sortValue.map((slot)=>slot.value)}`
+            }
+            getMinSum(){
+                let result = this.sortValue.findLast(slot=> slot.count > 0 )
+                if(!result){
+                    throw new Error("Відсутні купюри");
+                }
+                return  result.value*1
+            }
+            getMaxSum(){
+                let result = this.sortValue.reduce((prevSum,slot) =>
+                    prevSum + (slot.value*slot.count)
+                ,0)
+                if(!result){
+                    throw new Error("Відсутні купюри");
+                }
+                return result
+            }
+            
+            getMoney(userRequest){
+                if(userRequest > this.getMaxSum() || userRequest < this.getMinSum()){
+                    throw new Error(`Мінімальна сума зняття готівки: ${this.getMinSum()}, максимальна: ${this.getMaxSum()}`);
+                    
+                }
+                let slotCheck = []
+                let checkSum = userRequest
+                let checkValueArr = this.sortValue
+
+                for (let i = 0; i < checkValueArr.length; i++) {
+                    if (checkSum <= 0) break;
+                    let slot = checkValueArr[i];
+                    let checkValideCount = Math.floor(checkSum / slot.value);
+
+                    if (checkValideCount > 0 && slot.count > 0) {
+                        if (slot.count >= checkValideCount) {
+                            checkSum -= slot.value * checkValideCount;
+                            slot.count -= checkValideCount;
+                            slotCheck.push({ value: slot.value, count: checkValideCount });
+                        } else {
+                            checkSum -= slot.value * slot.count;
+                            slotCheck.push({ value: slot.value, count: slot.count });
+                            slot.count = 0; 
+                        }
+                    }
+                }
+                
+                if(checkSum === 0){
+                    this.sortValue = checkValueArr
+                    return `Отримайте кошти `
+                    
+                }
+                else{
+                    return `Ця сума недоступна. Доступні купюри ${this.toString()}`
+                }
+                
+            }
+        }
+        
+    let testBankomat = new TBankomat(10,14,20,10,30,5)
+    console.log(testBankomat);
+    console.log(testBankomat.getMaxSum())
+    document.write(testBankomat)
+    console.log(testBankomat.getMoney(10))
+    console.log(testBankomat.getMoney(10))
+    console.log(testBankomat);
     // }
     </script>
 </body>
